@@ -1,11 +1,16 @@
 package com.kdt.board;
 
-import jakarta.persistence.*;
-import lombok.*;
-
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
-
 
 @Entity
 @Table(name = "board_member")
@@ -20,14 +25,11 @@ public class Member {
     @Column(nullable = false, length = 20)
     private String nickname;
 
-    public Member() {
-    }
-
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Post> posts = new ArrayList<>();
 
-    public void addPost(Post post){
-        this.posts.add(post);
+    public Member() {
     }
 
     public Member(String loginId, String nickname) {
@@ -35,27 +37,32 @@ public class Member {
         this.nickname = nickname;
     }
 
-    public Long getId() {
-        return id;
+    public Long getId() { return this.id; }
+    public String getLoginId() { return this.loginId; }
+    public void setLoginId(String loginId) { this.loginId = loginId; }
+    public String getNickname() { return this.nickname; }
+    public void setNickname(String nickname) { this.nickname = nickname; }
+    public List<Post> getPosts() { return this.posts; }
+
+    public void addPost(Post post) {
+        if (post == null) {
+            throw new IllegalArgumentException("게시글은 null일 수 없습니다.");
+        }
+        if (post.getMember() != null && post.getMember() != this) {
+            throw new IllegalArgumentException("다른 회원의 게시글을 이전하지 않습니다.");
+        }
+        if (!this.posts.contains(post)) {
+            this.posts.add(post);
+        }
+        post.setMember(this);
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getLoginId() {
-        return loginId;
-    }
-
-    public void setLoginId(String loginId) {
-        this.loginId = loginId;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+    public void removePost(Post post) {
+        if (post == null) {
+            throw new IllegalArgumentException("게시글은 null일 수 없습니다.");
+        }
+        if (this.posts.remove(post)) {
+            post.setMember(null);
+        }
     }
 }

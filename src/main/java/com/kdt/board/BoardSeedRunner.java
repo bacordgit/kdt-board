@@ -1,4 +1,4 @@
-package com.kdt.board;
+/*package com.kdt.board;
 
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -73,4 +73,4 @@ public class BoardSeedRunner implements ApplicationRunner {
             System.out.println("seed skip opened");
         }
     }
-}
+}*/

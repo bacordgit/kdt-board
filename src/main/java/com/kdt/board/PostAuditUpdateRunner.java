@@ -1,4 +1,4 @@
-package com.kdt.board;
+/*package com.kdt.board;
 
 import java.time.Instant;
 import org.springframework.boot.ApplicationArguments;
@@ -56,4 +56,4 @@ public class PostAuditUpdateRunner implements ApplicationRunner {
         System.out.println("audit reload createdAt=" + reloaded.getCreatedAt());
         System.out.println("audit reload updatedAt=" + reloaded.getUpdatedAt());
     }
-}
+}*/

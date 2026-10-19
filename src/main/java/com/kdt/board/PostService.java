@@ -3,6 +3,7 @@ package com.kdt.board;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -33,6 +34,15 @@ public class PostService {
             System.out.println("error");
         }
         else this.postRepository.delete(post);
+    }
+
+    @Transactional(readOnly = true)
+    public String findTitleWithLoginId(Long id) {
+        Post post = this.postRepository.findById(id).orElse(null);
+        if (post == null) {
+            return "missing";
+        }
+        return post.getTitle() + "by" + post.getMember().getLoginId();
     }
 
 }

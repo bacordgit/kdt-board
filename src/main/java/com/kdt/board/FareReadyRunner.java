@@ -1,4 +1,4 @@
-package com.kdt.board;
+/*package com.kdt.board;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -18,3 +18,4 @@ public class FareReadyRunner implements ApplicationRunner {
         System.out.println("fare ready" + this.service.price());
     }
 }
+*/

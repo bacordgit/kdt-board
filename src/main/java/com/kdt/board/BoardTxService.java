@@ -94,5 +94,4 @@ public class BoardTxService {
         return post.getTitle() + "by" + post.getMember().getLoginId();
     }
 
-
 }

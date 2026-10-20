@@ -44,5 +44,23 @@ public class PostService {
         }
         return post.getTitle() + "by" + post.getMember().getLoginId();
     }
+    @Transactional(readOnly = true)
+    public List<Post> findAllWithMember(){
+        return this.postRepository.findAllWithMember();
+    }
+    @Transactional(readOnly = true)
+    public long countPosts() {
+        return this.postRepository.countPosts();
+    }
+    @Transactional(readOnly = true)
+    public int countLoadedPosts() {
+        List<Post> posts = this.postRepository.findAll();
+
+        return posts.size();
+    }
+    @Transactional(readOnly = true)
+    public long countByTitle(String title) {
+        return this.postRepository.countByTitle(title);
+    }
 
 }

@@ -1,10 +1,14 @@
 package com.kdt.board;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class PostController {
+
+    private static final Logger log = LoggerFactory.getLogger(PostController.class);
 
     private final PostService postService;
 
@@ -22,6 +26,8 @@ public class PostController {
                     .append(post.getTitle())
                     .append(" ")
                     .append(post.getCreatedAt())
+                    .append(" ")
+                    .append(post.getUpdatedAt())
                     .append("\n");
         }
         return lines.toString();
@@ -39,4 +45,47 @@ public class PostController {
                 + " by "
                 + post.getMember().getLoginId();
     }
+
+    @GetMapping("/posts/with-member")
+    public String withMember() {
+        log.info("sql compare normal begin");
+        int rows = 0;
+        StringBuilder lines = new StringBuilder();
+        for (Post post : this.postService.findAll()) {
+            lines.append(post.getTitle())
+                    .append(" by ")
+                    .append(post.getMember().getLoginId())
+                    .append("\n");
+            rows++;
+        }
+        log.info("sql compare normal end rows={}", rows);
+        return lines.toString();
+    }
+    @GetMapping("/posts/joined")
+    public String joined(){
+        log.info("sql compare joined begin");
+        int rows = 0;
+        StringBuilder lines = new StringBuilder();
+        for (Post post : this.postService.findAllWithMember()) {
+            lines.append(post.getTitle()).append(" by ")
+                    .append(post.getMember().getLoginId()).append("\n");
+            rows++;
+        }
+        log.info("sql compare joined end rows={}", rows);
+        return lines.toString();
+    }
+    @GetMapping("/posts/count")
+    public String count() {
+        return "" + this.postService.countPosts();
+    }
+    @GetMapping("/posts/list-count")
+    public String listCount() {
+        return "" + this.postService.countLoadedPosts();
+    }
+    @GetMapping("/posts/title-count/closed")
+    public String countClosed() {
+        return "" + this.postService.countByTitle("closed");
+    }
+
+
 }
